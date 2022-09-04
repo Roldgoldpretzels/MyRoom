@@ -22,8 +22,8 @@ export default class Camera {
             1000
         );
         this.scene.add(this.perspectiveCamera);
-        this.perspectiveCamera.position.x = 29;
-        this.perspectiveCamera.position.y = 14;
+        this.perspectiveCamera.position.x = 20;
+        this.perspectiveCamera.position.y = 12;
         this.perspectiveCamera.position.z = 12;
     }
 
@@ -33,13 +33,13 @@ export default class Camera {
             (this.sizes.aspect * this.sizes.frustrum) / 2,
             this.sizes.frustrum / 2,
             -this.sizes.frustrum / 2,
-            -100,
-            100
+            -30,
+            30
         );
 
         // 6.5
         this.orthographicCamera.position.y = 5;
-        this.orthographicCamera.position.z = 8.5;
+        this.orthographicCamera.position.z = 7.5;
         this.orthographicCamera.rotation.x = -Math.PI / 6;
 
         this.scene.add(this.orthographicCamera);
@@ -47,8 +47,8 @@ export default class Camera {
         // this.helper = new THREE.CameraHelper(this.orthographicCamera);
         // this.scene.add(this.helper);
 
-        const size = 30;
-        const divisions = 30;
+        const size = 10;
+        const divisions = 10;
 
         // const gridHelper = new THREE.GridHelper(size, divisions);
         // this.scene.add(gridHelper);

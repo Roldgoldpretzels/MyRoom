@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Experience from "../Experience";
 import GSAP from "gsap";
-
+import { RectAreaLightHelper } from "three/examples/jsm/helpers/RectAreaLightHelper.js";
 
 
 export default class Room {
@@ -36,36 +36,79 @@ export default class Room {
                     groupchild.receiveShadow = true;
                 })
             }
-            if (child.name === "Glass") {
-                child.material = new THREE.MeshPhysicalMaterial();
-                child.material.roughness = 0;
-                child.material.color.set(0xffffff);
-                child.material.ior = 3;
-                child.material.transmission = 1;
-                child.material.opacity = 1;
+            if (child.name === "Aquarium") {
+                child.children[0].material = new THREE.MeshPhysicalMaterial();
+                child.children[0].material.roughness = 0;
+                child.children[0].material.color.set(0xffffff);
+                child.children[0].material.ior = 3;
+                child.children[0].material.transmission = 1;
+                child.children[0].material.opacity = 1;
 
             }
-            if (child.name === "GlassTank") {
-                child.material = new THREE.MeshPhysicalMaterial();
-                child.material.roughness = 0;
-                child.material.color.set(0x8DE8E8);
-                child.material.ior = 3;
-                child.material.transmission = 1;
-                child.material.opacity = 1;
+            if (child.name === "Shelves") {
+                child.children[48].material = new THREE.MeshPhysicalMaterial();
+                child.children[48].material.roughness = 0;
+                child.children[48].material.color.set(0x8DE8E8);
+                child.children[48].material.ior = 3;
+                child.children[48].material.transmission = 1;
+                child.children[48].material.opacity = 1;
 
             }
-        })
+        });
+        //Fish Tank Light
+        const width = .7;
+        const height = .5;
+        const intensity = 2;
+        const rectLight = new THREE.RectAreaLight(0xffffff, intensity, width, height);
+        rectLight.position.set(5.98828, 5.5, 0.4);
+        rectLight.rotation.x = -Math.PI/2;
+        rectLight.rotation.z = -Math.PI/4;
+
+        //Gameboy Light
+        const gamewidth = .15;
+        const gameheight = .15;
+        const gameintensity = 5;
+        const gameLight = new THREE.RectAreaLight(0x69D952, gameintensity, gamewidth, gameheight);
+        gameLight.position.set(-5.13667, 11.5, 0.45);
+        gameLight.rotation.z = -Math.PI/2;
+        gameLight.rotation.y = -Math.PI/12;
+
+        //Earth Light
+
+        const earthwidth = .15;
+        const earthheight = .15;
+        const earthintensity = 2;
+        const earthLight = new THREE.RectAreaLight(0xFFFEB5, earthintensity, earthwidth, earthheight);
+        earthLight.position.set(-7.75 , 4.5, 1);
+        earthLight.rotation.z = -Math.PI/4;
+        earthLight.rotation.x = -Math.PI/2;
+
+        this.actualRoom.add(rectLight);
+        this.actualRoom.add(gameLight);
+        this.actualRoom.add(earthLight);
+
+        const rectLightHelper = new RectAreaLightHelper(earthLight);
+
+        // rectLight.add(rectLightHelper);
+        // gameLight.add(rectLightHelper);
+        // earthLight.add(rectLightHelper);
+
+
+
         this.scene.add(this.actualRoom);
-        this.actualRoom.scale.set(0.11, 0.11, 0.11);
-        this.actualRoom.rotation.y = Math.PI / -2;
+        this.actualRoom.scale.set(0.17, 0.17, 0.17);
     }
 
     setAnimation() {
+
         this.mixer = new THREE.AnimationMixer(this.actualRoom);
-        this.swim = this.mixer.clipAction(this.room.animations[0]);
+        this.swim = this.mixer.clipAction(this.room.animations[15]);
+        this.fly = this.mixer.clipAction(this.room.animations[16]);
+
+        this.fly.play();
         this.swim.play();
     }
-    
+
     onMouseMove() {
         window.addEventListener("mousemove", (e) => {
             this.rotation =
@@ -74,7 +117,7 @@ export default class Room {
         });
     }
 
-    resize() {}
+    resize() { }
 
     update() {
         this.lerp.current = GSAP.utils.interpolate(
