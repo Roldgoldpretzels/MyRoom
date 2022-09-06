@@ -36,11 +36,12 @@ export default class Room {
                     groupchild.receiveShadow = true;
                 })
             }
+
             if (child.name === "Aquarium") {
                 child.children[0].material = new THREE.MeshPhysicalMaterial();
                 child.children[0].material.roughness = 0;
                 child.children[0].material.color.set(0xffffff);
-                child.children[0].material.ior = 3;
+                child.children[0].material.ior = 2.33;
                 child.children[0].material.transmission = 1;
                 child.children[0].material.opacity = 1;
 
@@ -49,20 +50,46 @@ export default class Room {
                 child.children[48].material = new THREE.MeshPhysicalMaterial();
                 child.children[48].material.roughness = 0;
                 child.children[48].material.color.set(0x8DE8E8);
-                child.children[48].material.ior = 3;
+                child.children[48].material.ior = 2.3;
                 child.children[48].material.transmission = 1;
                 child.children[48].material.opacity = 1;
 
             }
+
+            if (child.name === "Mini_Floor") {
+                child.position.x = 0;
+                child.position.z = 5;
+            }
+
+            // if (child.name === "Mailbox" ||
+            //     child.name === "Leaves" || 
+            //     child.name === "Grass" || 
+            //     child.name === "Dirt" || 
+            //     child.name === "Tree" || 
+            //     child.name === "Apples" || 
+            //     child.name === "FirstFloor" || 
+            //     child.name === "SecondFloor" || 
+            //     child.name === "ThirdFloor"
+            //     ) {
+
+            child.scale.set(0, 0, 0);
+            if (child.name === "Cube") {
+                // child.scale.set(1, 1, 1);
+                child.position.set(0, -1, 0);
+                child.rotation.y = Math.PI / 4;
+            }
+
+            this.roomChildren[child.name.toLowerCase()] = child;
         });
+
         //Fish Tank Light
         const width = .7;
         const height = .5;
         const intensity = 2;
         const rectLight = new THREE.RectAreaLight(0xffffff, intensity, width, height);
-        rectLight.position.set(5.98828, 5.5, 0.4);
-        rectLight.rotation.x = -Math.PI/2;
-        rectLight.rotation.z = -Math.PI/4;
+        rectLight.position.set(5.98828, 5.5, 1.6);
+        rectLight.rotation.x = -Math.PI / 2;
+        rectLight.rotation.z = -Math.PI / 4;
 
         //Gameboy Light
         const gamewidth = .15;
@@ -70,28 +97,32 @@ export default class Room {
         const gameintensity = 5;
         const gameLight = new THREE.RectAreaLight(0x69D952, gameintensity, gamewidth, gameheight);
         gameLight.position.set(-5.13667, 11.5, 0.45);
-        gameLight.rotation.z = -Math.PI/2;
-        gameLight.rotation.y = -Math.PI/12;
+        gameLight.rotation.z = -Math.PI / 2;
+        gameLight.rotation.y = -Math.PI / 12;
 
         //Earth Light
 
         const earthwidth = .15;
         const earthheight = .15;
-        const earthintensity = 2;
+        const earthintensity = 2.5;
         const earthLight = new THREE.RectAreaLight(0xFFFEB5, earthintensity, earthwidth, earthheight);
-        earthLight.position.set(-7.75 , 4.5, 1);
-        earthLight.rotation.z = -Math.PI/4;
-        earthLight.rotation.x = -Math.PI/2;
+        earthLight.position.set(-7.75, 4.5, 1);
+        earthLight.rotation.z = -Math.PI / 4;
+        earthLight.rotation.x = -Math.PI / 2;
 
         this.actualRoom.add(rectLight);
         this.actualRoom.add(gameLight);
         this.actualRoom.add(earthLight);
 
-        const rectLightHelper = new RectAreaLightHelper(earthLight);
+        this.roomChildren["rectLight"] = rectLight;
+        this.roomChildren["gameLight"] = gameLight;
+        this.roomChildren["earthLight"] = earthLight;
 
-        // rectLight.add(rectLightHelper);
+        //const rectLightHelper = new RectAreaLightHelper(rectLight);
+
+        //rectLight.add(rectLightHelper);
         // gameLight.add(rectLightHelper);
-        // earthLight.add(rectLightHelper);
+        //earthLight.add(rectLightHelper);
 
 
 
@@ -100,13 +131,12 @@ export default class Room {
     }
 
     setAnimation() {
-
         this.mixer = new THREE.AnimationMixer(this.actualRoom);
-        this.swim = this.mixer.clipAction(this.room.animations[15]);
-        this.fly = this.mixer.clipAction(this.room.animations[16]);
+        // this.swim = this.mixer.clipAction(this.room.animations[15]);
+        // this.fly = this.mixer.clipAction(this.room.animations[14]);
 
-        this.fly.play();
-        this.swim.play();
+        // this.fly.play();
+        // this.swim.play();
     }
 
     onMouseMove() {
